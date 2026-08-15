@@ -378,7 +378,7 @@ h1 span,
   right: max(.65rem, 1.5vw);
   bottom: .25rem;
   color: #5f707b;
-  font-size: .55rem;
+  font-size: .65rem;
 }
 
 html[data-ntt-theme='dark'] {
