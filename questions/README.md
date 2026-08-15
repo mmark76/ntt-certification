@@ -27,6 +27,26 @@
   στο [`MOD-01-flashcards.md`](MOD-01-flashcards.md) και εμφανίζονται στο
   [`practice-binary.html#flashcards`](../practice-binary.html#flashcards).
 
+## Συμπληρωματικό StudyApp pack
+
+Προστέθηκε συμπληρωματική τράπεζα **75 flashcards** στην
+[`study-pack.html`](../study-pack.html):
+
+- `STA-001` έως `STA-035` — Ομάδα Α / Γενικές ερωτήσεις,
+- `STB-001` έως `STB-040` — Ομάδα Β / Ειδικές ερωτήσεις.
+
+Το υλικό προήλθε από δύο εισαγόμενα αρχεία StudyApp με σύνοψη κεφαλαίων και
+ερωτήσεις/απαντήσεις. Τα αρχεία δεν περιείχαν canonical source-question IDs ή
+PDF viewer pages, επομένως όλες οι κάρτες διατηρούνται ως
+`NEEDS_VERIFICATION` και **δεν** καταχωρίζονται ακόμη στα canonical registries
+του `data/curriculum.yml`. Η προσθήκη αυτή δεν αλλάζει την κατάσταση των 24
+modules ούτε παρουσιάζει τα `MOD-02` έως `MOD-24` ως ολοκληρωμένα.
+
+Τα δεδομένα της σελίδας βρίσκονται στα `data/study-pack-a-*.json` και
+`data/study-pack-b-*.json`. Η επόμενη φάση είναι η αντιστοίχιση κάθε κάρτας με
+το κατάλληλο source-question ID και PDF viewer page του
+`data/theory-coverage.yml` πριν από canonical ένταξη.
+
 Τα quiz questions και οι flashcards είναι διαφορετικοί τύποι artifact. Στο
 `data/curriculum.yml` κάθε module έχει ξεχωριστές λίστες `questions` και
 `flashcards`, καθώς και αντίστοιχα top-level registries. Κάθε flashcard
