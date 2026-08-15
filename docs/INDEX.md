@@ -36,8 +36,15 @@ application-defined και δεν σχετίζεται με την αρίθμη�
 
 ## Questions
 
-- [`../questions/README.md`](../questions/README.md) — σύστημα ερωτήσεων και αυτοαξιολόγησης
-- [`../questions/MOD-01-flashcards.md`](../questions/MOD-01-flashcards.md) — τράπεζα 12 flashcards του MOD-01 (`NEEDS_VERIFICATION`)
+- [`../questions/README.md`](../questions/README.md) — σύστημα ερωτήσεων, αυτοαξιολόγησης και τεκμηρίωση του συμπληρωματικού StudyApp pack
+- [`../questions/MOD-01-flashcards.md`](../questions/MOD-01-flashcards.md) — τράπεζα 12 canonical flashcards του MOD-01 (`NEEDS_VERIFICATION`)
+- [`../study-pack.html`](../study-pack.html) — διαδραστική συμπληρωματική τράπεζα 75 flashcards: 35 Ομάδα Α και 40 Ομάδα Β (`NEEDS_VERIFICATION`, εκτός canonical registries)
+- `../data/study-pack-a-*.json` — δεδομένα 35 εισαγόμενων flashcards της Ομάδας Α
+- `../data/study-pack-b-*.json` — δεδομένα 40 εισαγόμενων flashcards της Ομάδας Β
+
+Οι 75 συμπληρωματικές κάρτες δεν διαθέτουν ακόμη verified αντιστοίχιση με
+source-question IDs και PDF viewer pages του canonical coverage map. Δεν
+μεταβάλλουν τη διαθεσιμότητα ή την κατάσταση ολοκλήρωσης των 24 modules.
 
 ## Practical work
 
@@ -46,7 +53,7 @@ application-defined και δεν σχετίζεται με την αρίθμη�
 
 ## Resources
 
-- [`../resources/KNOWLEDGE_SOURCE.md`](../resources/KNOWLEDGE_SOURCE.md) — μοναδική πηγή γνώσης και κανόνες ιχνηλασιμότητας
+- [`../resources/KNOWLEDGE_SOURCE.md`](../resources/KNOWLEDGE_SOURCE.md) — μοναδική canonical πηγή γνώσης και κανόνες ιχνηλασιμότητας
 - `../resources/TERMINOLOGY-EL-EN.md` — δίγλωσση τεχνική ορολογία, προς δημιουργία
 
 ## Progress
@@ -70,10 +77,13 @@ application-defined και δεν σχετίζεται με την αρίθμη�
 - [x] Πρότυπα θεωρίας, ερωτήσεων και εργαστηρίων
 - [x] Αρχικό πρόγραμμα μελέτης
 - [x] Κανονικός planning map και για τις 318 θεωρητικές ερωτήσεις
-- [ ] Ανθρώπινη επαλήθευση όλων των mappings και της ταξινομίας κεφαλαίων
-- [x] Πρώτη διαθέσιμη εκπαιδευτική ενότητα (`NEEDS_VERIFICATION`)
+- [x] Συμπληρωματική τράπεζα 75 StudyApp flashcards (`NEEDS_VERIFICATION`)
+- [ ] Ανθρώπινη επαλήθευση όλων των mappings, της ταξινομίας κεφαλαίων και του StudyApp pack
+- [x] Πρώτη διαθέσιμη canonical εκπαιδευτική ενότητα (`NEEDS_VERIFICATION`)
 
-Μόνο το `MOD-01` διαθέτει σήμερα μάθημα, flashcards, quiz και εργαστήριο και
-παραμένει `NEEDS_VERIFICATION`. Τα `MOD-02` έως `MOD-24` είναι planned
-curriculum placeholders, όχι ολοκληρωμένα μαθήματα. Η πλήρης θεωρία θα
-εισαχθεί σε μεταγενέστερα Pull Requests.
+Μόνο το `MOD-01` διαθέτει σήμερα canonical μάθημα, flashcards, quiz και
+εργαστήριο και παραμένει `NEEDS_VERIFICATION`. Τα `MOD-02` έως `MOD-24` είναι
+planned curriculum placeholders, όχι ολοκληρωμένα μαθήματα. Η συμπληρωματική
+τράπεζα 75 flashcards παραμένει εκτός canonical registries μέχρι να
+ολοκληρωθεί η ιχνηλασιμότητά της. Η πλήρης θεωρία θα εισαχθεί σε
+μεταγενέστερα Pull Requests.
