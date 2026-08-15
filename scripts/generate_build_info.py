@@ -31,6 +31,23 @@ BUILD_INFO_RE = re.compile(
 )
 NAVIGATION_SCRIPT = """
 document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.pilot-notice').forEach((notice) => notice.remove());
+
+  document.querySelectorAll('.eyebrow').forEach((eyebrow) => {
+    eyebrow.textContent = eyebrow.textContent
+      .replace(' · Pilot · ', ' · ')
+      .replace(' · Pilot', '');
+  });
+
+  document.querySelectorAll('.cta-card h2').forEach((heading) => {
+    if (heading.textContent.includes('πρώτη πιλοτική ενότητα')) {
+      heading.textContent = heading.textContent.replace(
+        'πρώτη πιλοτική ενότητα',
+        'πρώτη διαθέσιμη ενότητα'
+      );
+    }
+  });
+
   const nav = document.querySelector('#main-nav');
   if (!nav) return;
 
