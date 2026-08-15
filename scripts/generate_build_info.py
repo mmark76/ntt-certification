@@ -29,6 +29,26 @@ BUILD_INFO_RE = re.compile(
     r"  shortSha: '([^']+)'\n"
     r"\}\);\n?\Z"
 )
+NAVIGATION_SCRIPT = """
+document.addEventListener('DOMContentLoaded', () => {
+  const nav = document.querySelector('#main-nav');
+  if (!nav) return;
+
+  let link = nav.querySelector('a[href="study-pack.html"]');
+  if (!link) {
+    link = document.createElement('a');
+    link.href = 'study-pack.html';
+    link.textContent = 'Τράπεζα';
+    nav.append(link);
+  }
+
+  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  if (currentPage === 'study-pack.html') {
+    nav.querySelectorAll('a').forEach((item) => item.classList.remove('active'));
+    link.classList.add('active');
+  }
+});
+"""
 
 
 def _short_sha(value: str | None) -> str | None:
@@ -99,21 +119,27 @@ def _athens_time_zone() -> ZoneInfo:
 
 
 def render_build_info(build_stamp: str, short_sha: str) -> str:
-    """Return the JavaScript build metadata file."""
+    """Return the JavaScript build metadata file and shared navigation hook."""
 
-    return (
+    metadata = (
         "window.NTT_BUILD_INFO = Object.freeze({\n"
         f"  version: '{VERSION}',\n"
         f"  buildStamp: '{build_stamp}',\n"
         f"  shortSha: '{short_sha}'\n"
         "});\n"
     )
+    return f"{metadata}\n{NAVIGATION_SCRIPT.lstrip()}"
 
 
 def validate_build_info(content: str) -> str:
     """Validate either the committed fallback or generated deployment data."""
 
-    match = BUILD_INFO_RE.fullmatch(content)
+    navigation = NAVIGATION_SCRIPT.lstrip()
+    if not content.endswith(navigation):
+        raise ValueError("file does not include the expected navigation hook")
+
+    metadata = content[: -len(navigation)].rstrip() + "\n"
+    match = BUILD_INFO_RE.fullmatch(metadata)
     if match is None:
         raise ValueError("file does not match the expected JavaScript structure")
 
