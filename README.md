@@ -42,6 +42,12 @@ domains ή των 24 modules. Η δομή αυτή ορίζεται από τη�
 
 `Settings → Pages → Build and deployment → Source: GitHub Actions`
 
+## Analytics
+
+Η δημόσια εφαρμογή χρησιμοποιεί Google Analytics 4 με το κοινό Measurement ID του Markellos Ecosystem, `G-DK5WN8TH3Z`. Η κίνηση διαχωρίζεται στο GA4 μέσω του hostname `ntt-certification.markellosecosystem.com`.
+
+Το Google Consent Mode ξεκινά με analytics και advertising storage σε `denied`. Ο επισκέπτης μπορεί να επιλέξει «Μόνο απαραίτητα» ή να επιτρέψει analytics. Google Signals και ad personalization παραμένουν απενεργοποιημένα.
+
 ## Σκοπός
 
 Το repository μετατρέπει το μοναδικό canonical βοήθημα γνώσης σε μικρές, ελέγξιμες ενότητες και συνδυάζει:
