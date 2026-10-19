@@ -6,15 +6,9 @@
   const FLASHCARD_STORAGE_KEY = 'ntt-flashcard-confidence-v1';
   const FLASHCARD_CLEAR_EVENT = 'ntt:flashcard-confidence-cleared';
   const SETTINGS_KEY = 'nt-certification-interface-v2';
-  const ANALYTICS_CONSENT_STORAGE_KEY = 'ntt.analyticsConsent.v1';
-  const GA4_MEASUREMENT_ID = 'G-DK5WN8TH3Z';
-  const GOOGLE_TAG_SCRIPT_ID = 'ntt-google-tag';
-  const DENIED_ANALYTICS_CONSENT = Object.freeze({
-    ad_storage: 'denied',
-    ad_user_data: 'denied',
-    ad_personalization: 'denied',
-    analytics_storage: 'denied'
-  });
+  const ANALYTICS_SCRIPT_ID = 'ntt-cookieless-analytics';
+  const ANALYTICS_SCRIPT_URL = 'https://analytics.markellosecosystem.com/v1/script.js';
+  const ANALYTICS_HOSTS = new Set(['ntt-certification.markellosecosystem.com']);
   const PASSING_QUIZ_SCORE = 80;
   const DEFAULT_BUILD_INFO = Object.freeze({
     version: '0.1.0',
@@ -111,109 +105,55 @@
     }
   };
 
-  const getAnalyticsGtag = () => {
-    window.dataLayer = window.dataLayer || [];
-    if (typeof window.gtag !== 'function') {
-      window.gtag = function gtag() {
-        window.dataLayer.push(arguments);
-      };
-    }
-    return window.gtag;
-  };
-
-  const readAnalyticsConsent = () => {
-    const stored = safeReadStorage(ANALYTICS_CONSENT_STORAGE_KEY).value;
-    return stored === 'granted' || stored === 'denied' ? stored : null;
-  };
-
-  const applyAnalyticsConsent = (consent) => {
-    getAnalyticsGtag()('consent', 'update', {
-      ...DENIED_ANALYTICS_CONSENT,
-      analytics_storage: consent === 'granted' ? 'granted' : 'denied'
-    });
-  };
-
-  const setAnalyticsConsent = (consent) => {
-    safeWriteStorage(ANALYTICS_CONSENT_STORAGE_KEY, consent);
-    applyAnalyticsConsent(consent);
-  };
-
   const initializeAnalytics = () => {
-    const gtag = getAnalyticsGtag();
-    gtag('consent', 'default', DENIED_ANALYTICS_CONSENT);
-    applyAnalyticsConsent(readAnalyticsConsent());
-
-    if (!document.getElementById(GOOGLE_TAG_SCRIPT_ID)) {
+    if (
+      location.protocol === 'https:'
+      && ANALYTICS_HOSTS.has(location.hostname.toLowerCase())
+      && !document.getElementById(ANALYTICS_SCRIPT_ID)
+    ) {
       const script = document.createElement('script');
-      script.id = GOOGLE_TAG_SCRIPT_ID;
+      script.id = ANALYTICS_SCRIPT_ID;
       script.async = true;
-      script.src = `https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`;
+      script.src = ANALYTICS_SCRIPT_URL;
       document.head.appendChild(script);
     }
-
-    gtag('js', new Date());
-    gtag('config', GA4_MEASUREMENT_ID, {
-      allow_google_signals: false,
-      allow_ad_personalization_signals: false
-    });
   };
 
-  const setupAnalyticsConsent = () => {
+  const setupAnalyticsNotice = () => {
     if (!document.body) return;
 
-    const initialConsent = readAnalyticsConsent();
     const banner = document.createElement('aside');
     banner.className = 'analytics-consent';
     banner.setAttribute('role', 'dialog');
     banner.setAttribute('aria-labelledby', 'analytics-consent-title');
-    banner.hidden = initialConsent !== null;
 
     const copy = document.createElement('div');
     copy.className = 'analytics-consent__copy';
 
     const title = document.createElement('h2');
     title.id = 'analytics-consent-title';
-    title.textContent = 'Ρυθμίσεις analytics';
+    title.textContent = 'Cookie-less analytics';
 
     const description = document.createElement('p');
     description.textContent =
-      'Το Google Analytics βοηθά στη μέτρηση επισκέψεων και χρήσης των σελίδων. Η αποθήκευση analytics παραμένει απενεργοποιημένη εκτός αν την επιτρέψεις. Οι διαφημιστικές λειτουργίες παραμένουν απενεργοποιημένες.';
+      'Δεν χρησιμοποιούνται cookies για analytics. Καταγράφεται μόνο συγκεντρωτικά η ώρα, το domain και η χώρα της επίσκεψης, αποκλειστικά για την κατανόηση της επισκεψιμότητας από τον διαχειριστή.';
 
     copy.append(title, description);
 
     const actions = document.createElement('div');
     actions.className = 'analytics-consent__actions';
 
-    const necessaryButton = document.createElement('button');
-    necessaryButton.type = 'button';
-    necessaryButton.textContent = 'Μόνο απαραίτητα';
-
-    const allowButton = document.createElement('button');
-    allowButton.type = 'button';
-    allowButton.className = 'analytics-consent__allow';
-    allowButton.textContent = 'Επιτρέπω analytics';
-
     const closeButton = document.createElement('button');
     closeButton.type = 'button';
     closeButton.className = 'analytics-consent__close';
-    closeButton.setAttribute('aria-label', 'Κλείσιμο ρυθμίσεων analytics');
+    closeButton.setAttribute('aria-label', 'Κλείσιμο ενημέρωσης analytics');
     closeButton.title = 'Κλείσιμο';
     closeButton.textContent = '×';
-    closeButton.hidden = initialConsent === null;
-
-    const choose = (consent) => {
-      setAnalyticsConsent(consent);
-      banner.hidden = true;
-      closeButton.hidden = false;
-    };
-
-    necessaryButton.addEventListener('click', () => choose('denied'));
-    allowButton.addEventListener('click', () => choose('granted'));
     closeButton.addEventListener('click', () => {
       banner.hidden = true;
     });
 
-    actions.append(necessaryButton, allowButton, closeButton);
+    actions.append(closeButton);
     banner.append(copy, actions);
     document.body.appendChild(banner);
 
@@ -222,11 +162,10 @@
       const choicesButton = document.createElement('button');
       choicesButton.type = 'button';
       choicesButton.className = 'ecosystem-footer__link analytics-choice-link';
-      choicesButton.textContent = 'Analytics';
+      choicesButton.textContent = 'Analytics πληροφορίες';
       choicesButton.addEventListener('click', () => {
-        closeButton.hidden = false;
         banner.hidden = false;
-        necessaryButton.focus();
+        closeButton.focus();
       });
       footerNavigation.appendChild(choicesButton);
     }
@@ -930,7 +869,7 @@
 
   if (window.__NTT_TESTING__ !== true) {
     initializeAnalytics();
-    setupAnalyticsConsent();
+    setupAnalyticsNotice();
   }
 
   applySettings(readSettings());
