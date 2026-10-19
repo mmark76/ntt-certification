@@ -44,9 +44,7 @@ domains ή των 24 modules. Η δομή αυτή ορίζεται από τη�
 
 ## Analytics
 
-Η δημόσια εφαρμογή χρησιμοποιεί Google Analytics 4 με το κοινό Measurement ID του Markellos Ecosystem, `G-DK5WN8TH3Z`. Η κίνηση διαχωρίζεται στο GA4 μέσω του hostname `ntt-certification.markellosecosystem.com`.
-
-Το Google Consent Mode ξεκινά με analytics και advertising storage σε `denied`. Ο επισκέπτης μπορεί να επιλέξει «Μόνο απαραίτητα» ή να επιτρέψει analytics. Google Signals και ad personalization παραμένουν απενεργοποιημένα.
+Η δημόσια εφαρμογή χρησιμοποιεί τον κοινό cookie-less μετρητή του Markellos Ecosystem. Καταγράφεται μόνο συγκεντρωτικά η ώρα, το domain και η χώρα της επίσκεψης, αποκλειστικά για την κατανόηση της επισκεψιμότητας από τον διαχειριστή. Δεν χρησιμοποιούνται cookies για analytics και δεν καταγράφονται στοιχεία ταυτοποίησης, διαδρομές σελίδων, referrers, συσκευές ή ενέργειες μέσα στην εφαρμογή.
 
 ## Σκοπός
 
