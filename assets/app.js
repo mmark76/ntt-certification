@@ -6,6 +6,7 @@
   const FLASHCARD_STORAGE_KEY = 'ntt-flashcard-confidence-v1';
   const FLASHCARD_CLEAR_EVENT = 'ntt:flashcard-confidence-cleared';
   const SETTINGS_KEY = 'nt-certification-interface-v2';
+  const ANALYTICS_NOTICE_DISMISSED_KEY = 'ntt-certification.analytics-notice-dismissed.v1';
   const ANALYTICS_SCRIPT_ID = 'ntt-cookieless-analytics';
   const ANALYTICS_SCRIPT_URL = 'https://analytics.markellosecosystem.com/v1/script.js';
   const ANALYTICS_HOSTS = new Set(['ntt-certification.markellosecosystem.com']);
@@ -151,10 +152,12 @@
     closeButton.textContent = '×';
     closeButton.addEventListener('click', () => {
       banner.hidden = true;
+      safeWriteStorage(ANALYTICS_NOTICE_DISMISSED_KEY, true);
     });
 
     actions.append(closeButton);
     banner.append(copy, actions);
+    banner.hidden = safeReadStorage(ANALYTICS_NOTICE_DISMISSED_KEY).value === true;
     document.body.appendChild(banner);
 
     const footerNavigation = document.querySelector('.ecosystem-footer__navigation');
@@ -863,7 +866,8 @@
       modulePercent,
       calculatePercent,
       clearSavedLearningData,
-      readCurriculum
+      readCurriculum,
+      setupAnalyticsNotice
     });
   }
 
