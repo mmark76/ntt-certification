@@ -380,3 +380,48 @@ assert.equal(
 );
 
 console.log('Progress contract tests passed: migration, recovery, persistence and weights.');
+
+// Analytics notice persistence uses a separate display-preference key.
+// Recreate its DOM to simulate page reloads without affecting learning data.
+const noticeKey = 'ntt-certification.analytics-notice-dismissed.v1';
+storage.clear();
+const mountedNotices = [];
+const footerLinks = [];
+const makeElement = (tagName) => ({
+  tagName,
+  hidden: false,
+  children: [],
+  handlers: {},
+  append(...children) { this.children.push(...children); },
+  appendChild(child) { this.children.push(child); },
+  setAttribute() {},
+  addEventListener(type, callback) { this.handlers[type] = callback; },
+  focus() { this.focused = true; },
+  click() { this.handlers.click?.(); }
+});
+documentStub.createElement = makeElement;
+documentStub.body = { appendChild(element) { mountedNotices.push(element); } };
+documentStub.querySelector = (selector) => (
+  selector === '.ecosystem-footer__navigation'
+    ? { appendChild(element) { footerLinks.push(element); } }
+    : null
+);
+
+api.setupAnalyticsNotice();
+assert.equal(mountedNotices[0].hidden, false, 'First visit must show the information.');
+const firstClose = mountedNotices[0].children[1].children[0];
+firstClose.click();
+assert.equal(mountedNotices[0].hidden, true, 'Close must hide the notice.');
+assert.equal(storage.getItem(noticeKey), 'true', 'Close must save the display preference.');
+
+api.setupAnalyticsNotice();
+assert.equal(mountedNotices[1].hidden, true, 'Refresh must preserve dismissal.');
+footerLinks[1].click();
+assert.equal(mountedNotices[1].hidden, false, 'Footer must reopen information manually.');
+api.setupAnalyticsNotice();
+assert.equal(mountedNotices[2].hidden, true, 'Manual reopening must not reset dismissal.');
+
+storage.removeItem(noticeKey);
+api.setupAnalyticsNotice();
+assert.equal(mountedNotices[3].hidden, false, 'Clearing site data must restore first-visit notice.');
+console.log('Analytics notice dismissal and manual reopening tests passed.');
